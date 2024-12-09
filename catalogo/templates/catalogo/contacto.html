@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacta con nosotros</title>
+    {% load static %}
+    <!-- Incluir Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        /* Estilo para el navbar */
+        .navbar {
+            background-color: #00bfae; /* Turquesa */
+        }
+        .navbar a {
+            color: white !important;
+        }
+        .navbar a:hover {
+            color: #ffd700 !important; /* Calipso */
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #00bfae; /* Turquesa */
+            color: white;
+            padding: 20px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+        footer a {
+            color: #ffd700; /* Calipso */
+        }
+        footer a:hover {
+            color: white;
+        }
+
+        /* Estilo para el formulario */
+        form {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 30px auto;
+            font-family: Arial, sans-serif;
+        }
+        form label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        form input[type="text"], form input[type="email"], form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        form textarea {
+            resize: vertical;
+        }
+        form button {
+            background-color: #9b59b6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        form button:hover {
+            background-color: #8e44ad;
+        }
+
+        /* Contenedor del formulario */
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Body */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        h1 {
+            color: #780e95; /* Verde para el éxito */
+        }
+        p {
+            font-size: 1.2rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/catalogo/">Inicio</a>
+                <a class="navbar-nav" href="#">Carrito</a>
+                <a class="navbar-nav" href="/contacto/">Contacto</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Formulario de Contacto -->
+    <div class="form-container">
+        <form id="contact-form" method="POST">
+            {% csrf_token %}
+            <h1>Contacta con nosotros</h1>
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required><br><br>
+
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="mensaje">Mensaje:</label><br>
+            <textarea id="mensaje" name="mensaje" rows="4" cols="50" required></textarea><br><br>
+
+            <!-- Botón de envío -->
+            <button type="submit">Enviar mensaje</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2024 Tienda de Frutos Secos</p>
+        <p>WhatsApp: <a href="https://wa.me/56996157231">+56996157231</a></p>
+        <p>Email: <a href="mailto:jocperezg@gmail.com">jocperezg@gmail.com</a></p>
+    </footer>
+
+    <!-- Incluir el script de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Función para manejar el envío del formulario
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevenir el envío por defecto del formulario
+
+            // Construir el enlace mailto
+            var nombre = document.getElementById('nombre').value;
+            var email = document.getElementById('email').value;
+            var mensaje = document.getElementById('mensaje').value;
+            var mailtoLink = 'mailto:jocperezg@gmail.com?subject=Mensaje de Contacto Boreal&body=Nombre: ' + nombre + '%0D%0AEmail: ' + email + '%0D%0AMensaje: ' + mensaje;
+
+            // Redirigir a mailto
+            window.location.href = mailtoLink;
+
+            // Redirigir a la página de agradecimiento después de 1 segundo
+            setTimeout(function() {
+                window.location.href =  "/contacto/gracias/"; // Redirige a la página de gracias
+            }, 1000); // Espera 1 segundo antes de redirigir
+        });
+    </script>
+</body>
+</html>
