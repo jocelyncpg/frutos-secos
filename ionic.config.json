@@ -1,0 +1,7 @@
+{
+  "name": "Boreal",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
