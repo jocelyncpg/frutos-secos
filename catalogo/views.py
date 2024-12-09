@@ -83,20 +83,21 @@ def carrito(request):
         'productos_carrito': productos_carrito,
         'total': total
     })
-
 def agregar_al_carrito(request, producto_id):
     producto = Producto.objects.get(id=producto_id)
-    carrito = request.session.get('carrito', [])
+    carrito = request.session.get('carrito', {})
 
-    # Comprobar si el producto ya está en el carrito
-    for item in carrito:
-        if item['id'] == producto.id:
-            item['cantidad'] += 1
-            break
+    # Si el producto ya está en el carrito, solo actualizamos la cantidad
+    if str(producto.id) in carrito:
+        carrito[str(producto.id)]['cantidad'] += 1
     else:
-        carrito.append({'id': producto.id, 'cantidad': 1})
+        carrito[str(producto.id)] = {
+            'nombre': producto.nombre,
+            'precio': producto.precio,
+            'cantidad': 1
+        }
 
-    # Guardar el carrito en la sesión
+    # Guardamos el carrito actualizado en la sesión
     request.session['carrito'] = carrito
 
     return redirect('carrito')
@@ -115,8 +116,24 @@ def pago_pendiente(request):
 
 
 def pagar(request):
-    # Muestra el formulario de pago
-    return render(request, 'catalogo/pagar.html')
+    # Obtener el carrito desde la sesión (ajusta esta parte según cómo manejes el carrito)
+    carrito = request.session.get('carrito', {})
+
+    # Si el carrito está vacío, asegúrate de pasar un valor 0
+    if not carrito:
+        total = 0
+    else:
+        # Calcula el total sumando los precios de los productos
+        total = sum(item['precio'] * item['cantidad'] for item in carrito.values())
+
+    # Agregar al contexto la variable total
+    context = {
+        'total': total,
+        'preference_id': 'tu_preference_id_aqui',  # Asegúrate de tener un preference_id válido
+    }
+
+    # Renderiza la plantilla con el contexto
+    return render(request, 'catalogo/pagar.html', context)
 
 def procesar_pago(request):
     if request.method == "POST":
@@ -135,7 +152,19 @@ def procesar_pago(request):
     else:
         return HttpResponse("Método no permitido", status=405)
 
+
+
 def transbank_checkout(request):
-    # Aquí iría la lógica para interactuar con Transbank (como crear una transacción)
-    # Por ahora, simplemente renderizamos una página de prueba
-    return render(request, 'catalogo/transbank_checkout.html')
+    # Asumimos que tienes un carrito de compras en la sesión
+    carrito = request.session.get('carrito', {})
+    
+    # Calcula el total del carrito (esto dependerá de cómo manejas el carrito en tu aplicación)
+    total = sum(item['precio'] * item['cantidad'] for item in carrito.values())
+    
+    # Crea el contexto para pasar a la plantilla
+    context = {
+        'total': total,  # Agrega el total al contexto
+        'preference_id': 'tu_preference_id_aqui',  # Ajusta con tu ID de preferencia de MercadoPago
+    }
+
+    return render(request, 'catalogo/transbank_checkout.html', context)
