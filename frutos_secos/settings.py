@@ -105,6 +105,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Ruta de tus archivos estáticos durante el desarrollo.
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Carpeta donde se recopilarán los archivos estáticos.
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -113,9 +115,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-STATICFILES_DIRS = [
-    BASE_DIR / "static",  # Asegúrate de que está en el nivel raíz del proyecto
-]
 
 # Configuración para el envío de correos
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -128,3 +127,4 @@ DEFAULT_FROM_EMAIL = 'tucorreo@gmail.com'  # Correo desde el cual se enviarán l
 
 # frutos_secos/settings.py
 MERCADOPAGO_ACCESS_TOKEN = 'TU_ACCESS_TOKEN'  # Reemplaza con tu token de acceso
+
